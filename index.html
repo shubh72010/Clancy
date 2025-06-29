@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Frontend Chatbot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Startup overlay for name/theme selection -->
+  <div id="startup-overlay" class="overlay active">
+    <div class="startup-box">
+      <h2>Welcome!</h2>
+      <form id="startup-form">
+        <label>
+          Your name:
+          <input type="text" id="userName" required maxlength="20" placeholder="You">
+        </label>
+        <label>
+          Bot name:
+          <input type="text" id="botName" required maxlength="20" placeholder="Bot">
+        </label>
+        <label>
+          Theme:
+          <select id="themeSelect">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <button type="submit">Start Chat</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Theme switch -->
+  <button id="theme-toggle" title="Switch theme">🌙</button>
+
+  <!-- Chat area -->
+  <div id="chat-container">
+    <div id="chat-area"></div>
+    <div id="typing-indicator" class="hidden">Bot is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+    <div id="chat-input-area">
+      <input type="text" id="chat-input" maxlength="500" placeholder="Type your message..." autocomplete="off">
+      <button id="send-btn" title="Send">➤</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
