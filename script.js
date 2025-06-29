@@ -1,5 +1,6 @@
+// Gemini API key - visible in frontend, do not use for production!
 const GEMINI_API_KEY = "AIzaSyC_52EQfWFJrx7-JX4sQbbY_CEQVqhCcYU";
-const MODEL_NAME = "gemini-pro"; // Or use "gemini-1.5-flash" if you prefer
+const MODEL_NAME = "gemini-pro";
 
 const ls = window.localStorage;
 let userName = ls.getItem('cb_userName') || 'You';
@@ -15,7 +16,7 @@ const overlay = document.getElementById('startup-overlay');
 const startupForm = document.getElementById('startup-form');
 const themeSelect = document.getElementById('themeSelect');
 
-// Utility functions (same as before)
+// Utility functions
 function nowTimestamp() {
   const d = new Date();
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -37,7 +38,7 @@ function showTypingIndicator(show=true) {
 function renderMessage(msg) {
   const bubble = document.createElement('div');
   bubble.className = `bubble ${msg.sender}`;
-  bubble.innerHTML = msg.text;
+  bubble.innerHTML = msg.text.replace(/\n/g, "<br>");
   const timestamp = document.createElement('div');
   timestamp.className = `timestamp ${msg.sender}`;
   timestamp.textContent = msg.time;
@@ -52,7 +53,7 @@ function renderHistory(history) {
 }
 
 // --- Gemini AI Integration ---
-let genAI, model, chatSession;
+let genAI, chatSession;
 async function setupGemini() {
   if (!genAI) {
     genAI = new google.generativeai.GenerativeModel({
@@ -76,15 +77,7 @@ async function aiBotReply(txt) {
   await setupGemini();
   showTypingIndicator(true);
 
-  // Build conversation history for context
-  let history = loadChatHistory().slice(-10); // last 10 exchanges
-  let context = history.filter(m => m.sender === 'user' || m.sender === 'bot')
-    .map(m => (m.sender === 'user' ? userName : botName) + ": " + m.text)
-    .join('\n');
-  context += `\n${userName}: ${txt}\n${botName}:`;
-
   try {
-    // Gemini chat API
     const result = await chatSession.sendMessage(txt);
     const reply = result.response.text().trim();
     addMsg('bot', reply || "I'm not sure how to reply.");
